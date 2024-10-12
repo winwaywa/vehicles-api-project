@@ -20,7 +20,10 @@ import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.service.CarService;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -97,6 +100,12 @@ public class CarControllerTest {
          *   below (the vehicle will be the first in the list).
          */
 
+        mvc.perform(
+                get(new URI("/cars"))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.carList.length()").value(1))
+                .andExpect(jsonPath("$._embedded.carList.[0].id").value(1L));
     }
 
     /**
@@ -109,6 +118,11 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+        mvc.perform(
+                get(new URI("/cars/1"))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L));
     }
 
     /**
@@ -122,6 +136,10 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+        mvc.perform(
+                delete(new URI("/cars/1"))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNoContent());
     }
 
     /**
